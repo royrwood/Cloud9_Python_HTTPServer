@@ -9,8 +9,14 @@ logging.basicConfig(level=logging.DEBUG, format="[%(asctime)s] {%(name)s:%(linen
 LOGGER = logging.getLogger(__name__)
 
 
+
 class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
-    responseNum = 0
+    def __init__(self,*args):
+        self.responseNum = 0
+        BaseHTTPServer.BaseHTTPRequestHandler.__init__(self, *args)
+        
+        
+    # Test with: curl -s cloud9-python-httpserver-royrwood.c9users.io:8080
     
     def do_GET(self):
         LOGGER.info("Client_address = %s", self.client_address)
@@ -30,12 +36,12 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         self.wfile.write("    </head>\n")
         self.wfile.write("    <body>\n")
         self.wfile.write("        <p>This is a test!</p>\n")
-        self.wfile.write("        <p>Request count = {}</p>\n".format(MyHandler.responseNum))
+        self.wfile.write("        <p>Request count = {}</p>\n".format(self.responseNum))
         self.wfile.write("        <p>You accessed path: %s</p>\n" % (self.path))
         self.wfile.write("    </body>\n")
         self.wfile.write("</html>\n")
         
-        MyHandler.responseNum += 1
+        self.responseNum += 1
 
 
 if __name__ == '__main__':
