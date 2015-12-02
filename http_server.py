@@ -10,12 +10,9 @@ LOGGER = logging.getLogger(__name__)
 
 
 
-class MyHandler(BaseHTTPRequestHandler):
-    def __init__(self,*args):
-        self.responseNum = 0
-        BaseHTTPRequestHandler.__init__(self, *args)
-        
-        
+class MyHTTPHandler(BaseHTTPRequestHandler):
+    responseNum = 0
+
     # Test with: curl -s cloud9-python-httpserver-royrwood.c9users.io:8080
     
     def do_GET(self):
@@ -36,12 +33,12 @@ class MyHandler(BaseHTTPRequestHandler):
         self.wfile.write("    </head>\n")
         self.wfile.write("    <body>\n")
         self.wfile.write("        <p>This is a test!</p>\n")
-        self.wfile.write("        <p>Request count = {}</p>\n".format(self.responseNum))
+        self.wfile.write("        <p>Request count = {}</p>\n".format(MyHTTPHandler.responseNum))
         self.wfile.write("        <p>You accessed path: %s</p>\n" % (self.path))
         self.wfile.write("    </body>\n")
         self.wfile.write("</html>\n")
         
-        self.responseNum += 1
+        MyHTTPHandler.responseNum += 1
 
 
 if __name__ == '__main__':
@@ -55,7 +52,7 @@ if __name__ == '__main__':
     LOGGER.info("HOST_NAME = %s", HOST_NAME)
     LOGGER.info("----------------------------")
 
-    http_server = HTTPServer((HOST_IP, HOST_PORT), MyHandler)
+    http_server = HTTPServer((HOST_IP, HOST_PORT), MyHTTPHandler)
     LOGGER.info("Server Starts - %s:%d", HOST_NAME, HOST_PORT)
     
     try:
