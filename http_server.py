@@ -1,6 +1,6 @@
 from __future__ import absolute_import, division, print_function
 import os
-import BaseHTTPServer
+from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import time
 import logging
 
@@ -10,10 +10,10 @@ LOGGER = logging.getLogger(__name__)
 
 
 
-class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+class MyHandler(BaseHTTPRequestHandler):
     def __init__(self,*args):
         self.responseNum = 0
-        BaseHTTPServer.BaseHTTPRequestHandler.__init__(self, *args)
+        BaseHTTPRequestHandler.__init__(self, *args)
         
         
     # Test with: curl -s cloud9-python-httpserver-royrwood.c9users.io:8080
@@ -55,14 +55,13 @@ if __name__ == '__main__':
     LOGGER.info("HOST_NAME = %s", HOST_NAME)
     LOGGER.info("----------------------------")
 
-    server_class = BaseHTTPServer.HTTPServer
-    httpd = server_class((HOST_IP, HOST_PORT), MyHandler)
+    http_server = HTTPServer((HOST_IP, HOST_PORT), MyHandler)
     LOGGER.info("Server Starts - %s:%d", HOST_NAME, HOST_PORT)
     
     try:
-        httpd.serve_forever()
+        http_server.serve_forever()
     except KeyboardInterrupt:
         pass
  
-    httpd.server_close()
+    http_server.server_close()
     LOGGER.info("Server Stops - %s:%d", HOST_NAME, HOST_PORT)
