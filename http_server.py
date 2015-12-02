@@ -15,6 +15,7 @@ class MyHTTPHandler(BaseHTTPRequestHandler):
 
     # Test with: curl -s cloud9-python-httpserver-royrwood.c9users.io:8080
     
+    """Respond to a GET request."""
     def do_GET(self):
         LOGGER.info("Client_address = %s", self.client_address)
         LOGGER.info("Path = %s", self.path)
@@ -23,7 +24,6 @@ class MyHTTPHandler(BaseHTTPRequestHandler):
             h = headers[i]
             LOGGER.info("%d: %s", i, h.rstrip())
  
-        """Respond to a GET request."""
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
